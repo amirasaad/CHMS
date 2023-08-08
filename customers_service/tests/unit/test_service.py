@@ -1,14 +1,16 @@
 from unittest.mock import Mock
 
 import pytest
+
 from customers_crud.exceptions import DatabaseError
+from customers_crud.repository import PureSQLRepository
 from customers_crud.services import (
     create_customer,
-    update_customer,
     delete_customer,
     get_customer,
+    update_customer,
 )
-from customers_crud.repository import PureSQLRepository
+
 
 class TestCreateCustomer:
     def test_create_customer_service(self, db_connection):
@@ -38,10 +40,12 @@ class TestUpdateCustomer:
             assert record.levelname == "CRITICAL"
         assert "Test" in caplog.text
 
+
 class TestDeleteCustomer:
     def test_delete_customer_service(self, db_connection):
         repo = PureSQLRepository(db_connection)
         assert delete_customer(1, repo)
+
     def test_handle_database_error(self, caplog, db_connection, db_cursor):
         repo = PureSQLRepository(db_connection)
         db_cursor.execute.side_effect = Exception("Test")
@@ -50,17 +54,17 @@ class TestDeleteCustomer:
             assert record.levelname == "CRITICAL"
         assert "Test" in caplog.text
 
+
 class TestGetCustomer:
     def test_get_customer_service(self, db_connection, db_cursor):
         repo = PureSQLRepository(db_connection)
-        db_cursor.fetchone.return_value = {
-            "id": 1,
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "test@example.com",
-        }
+        db_cursor.fetchone.return_value = (
+            1,
+            "John",
+            "Doe",
+            "test@example.com",
+        )
         assert get_customer(1, repo)
-
 
     def test_handle_database_error(self, caplog, db_connection, db_cursor):
         repo = PureSQLRepository(db_connection)

@@ -1,6 +1,7 @@
 # repository.py
 
 import logging
+
 from .exceptions import DatabaseError
 from .model import Customer
 
@@ -26,7 +27,6 @@ class PureSQLRepository:
                 ),
             )
         except Exception as e:
-            logger.critical(str(e))
             raise DatabaseError(str(e))
         self.db_connection.commit()
         return cursor.lastrowid
@@ -41,9 +41,9 @@ class PureSQLRepository:
                 )
             )
         except Exception as e:
-            logger.critical(str(e))
             raise DatabaseError(str(e))
-        return Customer.from_dict(cursor.fetchone())
+        customer_db = cursor.fetchone()
+        return Customer.from_row(customer_db)
 
     def update(self, customer_id: int, customer_dict: dict):
         cursor = self.db_connection.cursor()
@@ -60,7 +60,6 @@ class PureSQLRepository:
                 ),
             )
         except Exception as e:
-            logger.critical(str(e))
             raise DatabaseError(str(e))
         self.db_connection.commit()
 
@@ -68,11 +67,9 @@ class PureSQLRepository:
         cursor = self.db_connection.cursor()
         try:
             cursor.execute(
-                """DELETE first_name,last_name,email from {} WHERE id = {}""".format(
-                    self.db_table_name, customer_id
-                )
+                """DELETE FROM {} WHERE id = %s""".format(self.db_table_name),
+                (customer_id,),
             )
         except Exception as e:
-            logger.critical(str(e))
             raise DatabaseError(str(e))
         self.db_connection.commit()

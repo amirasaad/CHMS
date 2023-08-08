@@ -1,6 +1,7 @@
-from dataclasses import asdict, dataclass
 import json
-from typing import Optional
+from dataclasses import asdict, dataclass
+import re
+from typing import Tuple, Optional
 
 
 @dataclass
@@ -11,12 +12,12 @@ class Customer:
     id: Optional[int] = None
 
     @staticmethod
-    def from_dict(customer_dict):
+    def from_row(customer_row: Tuple[int, str, str, str]):
         return Customer(
-            id=customer_dict["id"],
-            first_name=customer_dict["first_name"],
-            last_name=customer_dict["last_name"],
-            email=customer_dict["email"],
+            id=customer_row[0],
+            first_name=customer_row[1],
+            last_name=customer_row[2],
+            email=customer_row[3],
         )
 
     def to_json(self):

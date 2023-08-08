@@ -1,9 +1,9 @@
 from unittest.mock import MagicMock, Mock
 
 import pytest
+
 from customers_crud.exceptions import DatabaseError
 from customers_crud.model import Customer
-
 from customers_crud.repository import PureSQLRepository
 
 
@@ -34,25 +34,26 @@ class TestPureSQLRepository:
 
     def test_get_customer_by_id(self, db_connection, db_cursor):
         repository = PureSQLRepository(db_connection)
-        customer_dict = {
-            "id": 1,
-            "first_name": "John",
-            "last_name": "Smith",
-            "email": "john@example.com",
-        }
-        db_cursor.fetchone.return_value = customer_dict
+        customer_row = (
+            1,
+            "John",
+            "Smith",
+            "john@example.com",
+        )
+        db_cursor.fetchone.return_value = customer_row
         db_customer = repository.get(customer_id=1)
         db_cursor.execute.assert_called_once_with(
             """SELECT id,first_name,last_name,email from Customers WHERE id = 1"""
         )
         db_cursor.fetchone.assert_called_once()
-        assert Customer.from_dict(customer_dict) == db_customer
+        assert Customer.from_row(customer_row) == db_customer
 
     def test_delete_customer_by_id(self, db_connection, db_cursor):
         repository = PureSQLRepository(db_connection)
         repository.delete(customer_id=1)
         db_cursor.execute.assert_called_once_with(
-            """DELETE first_name,last_name,email from Customers WHERE id = 1"""
+            """DELETE FROM Customers WHERE id = %s""",
+            (1,),
         )
         db_connection.commit.assert_called_once()
 

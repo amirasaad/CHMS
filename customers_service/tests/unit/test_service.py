@@ -6,7 +6,7 @@ from customers_crud.services import (
     get_customer,
 )
 from customers_crud.repository import PureSQLRepository
-from ..unit.test_repository import repo_with_mocked_cursor
+from ..integration.test_repository import repo_with_mocked_cursor
 
 
 def test_create_customer_service():
@@ -26,8 +26,9 @@ def test_delete_customer_service():
 
 
 def test_get_customer_service():
-    repo, mock_cursor, db_mock_connection = repo_with_mocked_cursor()
+    repo, mock_cursor, _ = repo_with_mocked_cursor()
     mock_cursor.fetchone.return_value = {
+        "id": 1,
         "first_name": "John",
         "last_name": "Doe",
         "email": "test@example.com",

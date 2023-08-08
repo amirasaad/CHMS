@@ -43,9 +43,10 @@ class TestPureSQLRepository:
             assert record.levelname == "CRITICAL"
         assert "Test" in caplog.text
 
-    def test_repository_get_customer_by_id(self):
+    def test_get_customer_by_id(self):
         repository, mock_cursor, _ = repo_with_mocked_cursor()
         customer_dict = {
+            "id": 1,
             "first_name": "John",
             "last_name": "Smith",
             "email": "john@example.com",
@@ -53,12 +54,12 @@ class TestPureSQLRepository:
         mock_cursor.fetchone.return_value = customer_dict
         db_customer = repository.get(customer_id=1)
         mock_cursor.execute.assert_called_once_with(
-            """SELECT first_name,last_name,email from Customers WHERE id = 1"""
+            """SELECT id,first_name,last_name,email from Customers WHERE id = 1"""
         )
         mock_cursor.fetchone.assert_called_once()
         assert Customer.from_dict(customer_dict) == db_customer
 
-    def test_repository_delete_customer_by_id(self):
+    def test_delete_customer_by_id(self):
         repository, mock_cursor, db_mock_connection = repo_with_mocked_cursor()
         repository.delete(customer_id=1)
         mock_cursor.execute.assert_called_once_with(
@@ -66,7 +67,7 @@ class TestPureSQLRepository:
         )
         db_mock_connection.commit.assert_called_once()
 
-    def test_repository_update_customer_by_id(self):
+    def test_update_customer_by_id(self):
         repository, mock_cursor, db_mock_connection = repo_with_mocked_cursor()
         customer_dict = {
             "first_name": "John",

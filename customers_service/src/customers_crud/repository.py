@@ -35,7 +35,7 @@ class PureSQLRepository:
         cursor = self.db_connection.cursor()
         try:
             cursor.execute(
-                """SELECT first_name,last_name,email from {} WHERE id = {}""".format(
+                """SELECT id,first_name,last_name,email from {} WHERE id = {}""".format(
                     self.db_table_name,
                     customer_id,
                 )

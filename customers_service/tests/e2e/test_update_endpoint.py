@@ -2,7 +2,7 @@ import requests
 from http import HTTPStatus
 from uuid import uuid4
 
-from .test_create_endpoint import post_to_create_customer
+from .utils import post_to_create_customer
 
 
 def test_should_return_status_200_for_valid_request():

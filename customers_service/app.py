@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from flask import Flask
 from flask import request
 
@@ -27,4 +28,25 @@ def create_customer():
     customer_id = services.create_customer(
         data["first_name"], data["last_name"], data["email"], repo
     )
-    return {"id": customer_id}, 201
+    return {"id": customer_id}, HTTPStatus.CREATED
+
+
+@app.route("/customers/<int:customer_id>", methods=["PUT"])
+def update_customer(customer_id):
+    data = request.get_json()
+    services.update_customer(
+        customer_id, data["first_name"], data["last_name"], data["email"], repo
+    )
+    return {"message": "Customer Updated."}, HTTPStatus.OK
+
+
+@app.route("/customers/<int:customer_id>", methods=["DELETE"])
+def delete_customer(customer_id):
+    services.delete_customer(customer_id, repo)
+    return {"message": "Customer Deleted."}, HTTPStatus.ACCEPTED
+
+
+@app.route("/customers/<int:customer_id>", methods=["DELETE"])
+def get_customer(customer_id):
+    customer = services.get_customer(customer_id, repo)
+    return {customer.to_json()}, HTTPStatus.ACCEPTED

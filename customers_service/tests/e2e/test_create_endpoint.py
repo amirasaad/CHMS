@@ -4,7 +4,7 @@ from http import HTTPStatus
 from uuid import uuid4
 
 
-def test_should_return_status_201_for_valid_request():
+def post_to_create_customer(skip_assert=False):
     response = requests.post(
         "http://127.0.0.1:5000/customers",
         json={
@@ -13,8 +13,14 @@ def test_should_return_status_201_for_valid_request():
             "email": f"{uuid4()}@example.com",
         },
     )
-    assert response.status_code == HTTPStatus.CREATED
-    assert "id" in response.json()
+    if not skip_assert:
+        assert response.status_code == HTTPStatus.CREATED
+        assert "id" in response.json()
+    return response.json()["id"]
+
+
+def test_should_return_status_201_for_valid_request():
+    post_to_create_customer()
 
 
 @pytest.mark.parametrize(

@@ -75,10 +75,15 @@ class TestPureSQLRepository:
         }
         repository.update(1, customer_dict)
         mock_cursor.execute.assert_called_once_with(
-            """UPDATE Customers SET first_name = {} SET last_name = {}, SET email = {}  WHERE id = 1""".format(
+            """UPDATE {} SET first_name = %s, last_name = %s, email = %s WHERE id = %s""".format(
+                repository.db_table_name
+            ),
+            (
                 customer_dict["first_name"],
                 customer_dict["last_name"],
                 customer_dict["email"],
-            )
+                1,
+            ),
         )
+
         db_mock_connection.commit.assert_called_once()

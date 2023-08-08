@@ -49,13 +49,15 @@ class PureSQLRepository:
         cursor = self.db_connection.cursor()
         try:
             cursor.execute(
-                """UPDATE {} SET first_name = {} SET last_name = {}, SET email = {}  WHERE id = {}""".format(
-                    self.db_table_name,
+                """UPDATE {} SET first_name = %s, last_name = %s, email = %s WHERE id = %s""".format(
+                    self.db_table_name
+                ),
+                (
                     customer_dict["first_name"],
                     customer_dict["last_name"],
                     customer_dict["email"],
                     customer_id,
-                )
+                ),
             )
         except Exception as e:
             logger.critical(str(e))

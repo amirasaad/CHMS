@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
+import json
 from typing import Optional
 
 
@@ -12,7 +13,11 @@ class Customer:
     @staticmethod
     def from_dict(customer_dict):
         return Customer(
+            id=customer_dict["id"],
             first_name=customer_dict["first_name"],
             last_name=customer_dict["last_name"],
             email=customer_dict["email"],
         )
+
+    def to_json(self):
+        return json.dumps(asdict(self))

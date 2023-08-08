@@ -1,5 +1,6 @@
 # repository.py
 
+from src.exceptions import DatabaseError
 from src.model import Customer
 
 
@@ -9,8 +10,14 @@ class PureSQLRepository:
         self.db_table_name = db_table_name
 
     def save(self, customer: Customer):
-        self.db_cursor.execute(
-            """INSERT INTO {}(first_name,last_name, email) VALUES ({},{},{})""".format(
-                self.db_table_name, customer.first_name, customer.last_name, customer.email
+        try:
+            self.db_cursor.execute(
+                """INSERT INTO {}(first_name,last_name, email) VALUES ({},{},{})""".format(
+                    self.db_table_name,
+                    customer.first_name,
+                    customer.last_name,
+                    customer.email,
+                )
             )
-        )
+        except Exception as e:
+            raise DatabaseError(str(e))

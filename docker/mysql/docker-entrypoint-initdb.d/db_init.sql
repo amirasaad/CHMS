@@ -2,10 +2,18 @@ CREATE TABLE IF NOT EXISTS Customers(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(50) NOT NULL,
-	email VARCHAR(100) NOT NULL,
-)
+	email VARCHAR(100) NOT NULL
+);
 
-CREATE TABLE IF NOT EXISTS Vehicles(
+
+CREATE TABLE IF NOT EXISTS VehicleCategories(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(50) UNIQUE NOT NULL,
+	capacity INT NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS Vehicles (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	category_id INT NOT NULL,
 	in_use BOOLEAN NOT NULL,
@@ -13,7 +21,8 @@ CREATE TABLE IF NOT EXISTS Vehicles(
 	FOREIGN KEY (category_id)
 		REFERENCES VehicleCategories(id)
 		ON DELETE CASCADE
-)
+);
+
 
 CREATE TABLE IF NOT EXISTS Bookings(
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,22 +34,16 @@ CREATE TABLE IF NOT EXISTS Bookings(
 	created_at TIMESTAMP NOT NULL,
 	CONSTRAINT FK_Bookings_Customer
 	FOREIGN KEY (customer_id)
-		REFERENCES Customers(id),
-		ON DELETE CASCADE
+		REFERENCES Customers(id)
+		ON DELETE CASCADE,
 	CONSTRAINT FK_Bookings_Vehicle
 	FOREIGN KEY (vehicle_id)
 		REFERENCES Vehicles(id)
 		ON DELETE CASCADE
-)
+);
 
-CREATE TABLE IF NOT EXISTS VehicleCategories(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(50) NOT NULL,
-	capacity INT NOT NULL,
-)
 
-INSERT INTO VehicleCategories (name, capacity) VALUES(
-	("small", 4),
-	("family", 7),
-	("van", 12)
-)
+INSERT INTO VehicleCategories (name,capacity) VALUES
+	('small',4),
+	('family',7),
+	('van',12);

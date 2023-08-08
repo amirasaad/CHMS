@@ -1,4 +1,7 @@
 from unittest.mock import Mock
+
+import pytest
+from customers_crud.exceptions import DatabaseError
 from customers_crud.services import (
     create_customer,
     update_customer,
@@ -7,30 +10,62 @@ from customers_crud.services import (
 )
 from customers_crud.repository import PureSQLRepository
 
+class TestCreateCustomer:
+    def test_create_customer_service(self, db_connection):
+        repo = PureSQLRepository(db_connection)
+        customer_id = create_customer("John", "Smith", "joe@example.com", repo)
+        assert customer_id != None
 
-def test_create_customer_service(db_connection):
-    repo = PureSQLRepository(db_connection)
-    customer_id = create_customer("John", "Smith", "joe@example.com", repo)
-    assert customer_id != None
-
-
-def test_update_customer_service(db_connection):
-    repo = PureSQLRepository(db_connection)
-    update_customer(1, "John", "Smith", "joe@example.com", repo)
-
-
-def test_delete_customer_service(db_connection):
-    repo = PureSQLRepository(db_connection)
-    delete_customer(1, repo)
+    def test_handle_database_error(self, caplog, db_connection, db_cursor):
+        repo = PureSQLRepository(db_connection)
+        db_cursor.execute.side_effect = Exception("Test")
+        assert not create_customer("John", "Smith", "joe@example.com", repo)
+        for record in caplog.records:
+            assert record.levelname == "CRITICAL"
+        assert "Test" in caplog.text
 
 
-def test_get_customer_service(db_connection, db_cursor):
-    repo = PureSQLRepository(db_connection)
-    db_cursor.fetchone.return_value = {
-        "id": 1,
-        "first_name": "John",
-        "last_name": "Doe",
-        "email": "test@example.com",
-    }
-    customer = get_customer(1, repo)
-    assert customer
+class TestUpdateCustomer:
+    def test_update_customer_service(self, db_connection):
+        repo = PureSQLRepository(db_connection)
+        assert update_customer(1, "John", "Smith", "joe@example.com", repo)
+
+    def test_handle_database_error(self, caplog, db_connection, db_cursor):
+        repo = PureSQLRepository(db_connection)
+        db_cursor.execute.side_effect = Exception("Test")
+        assert not update_customer(1, "John", "Smith", "joe@example.com", repo)
+        for record in caplog.records:
+            assert record.levelname == "CRITICAL"
+        assert "Test" in caplog.text
+
+class TestDeleteCustomer:
+    def test_delete_customer_service(self, db_connection):
+        repo = PureSQLRepository(db_connection)
+        assert delete_customer(1, repo)
+    def test_handle_database_error(self, caplog, db_connection, db_cursor):
+        repo = PureSQLRepository(db_connection)
+        db_cursor.execute.side_effect = Exception("Test")
+        assert not delete_customer(1, repo)
+        for record in caplog.records:
+            assert record.levelname == "CRITICAL"
+        assert "Test" in caplog.text
+
+class TestGetCustomer:
+    def test_get_customer_service(self, db_connection, db_cursor):
+        repo = PureSQLRepository(db_connection)
+        db_cursor.fetchone.return_value = {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "test@example.com",
+        }
+        assert get_customer(1, repo)
+
+
+    def test_handle_database_error(self, caplog, db_connection, db_cursor):
+        repo = PureSQLRepository(db_connection)
+        db_cursor.execute.side_effect = Exception("Test")
+        assert not get_customer(1, repo)
+        for record in caplog.records:
+            assert record.levelname == "CRITICAL"
+        assert "Test" in caplog.text

@@ -1,5 +1,6 @@
 import logging
-from sqlite3 import DatabaseError
+
+from customers_crud.exceptions import DatabaseError
 from .model import Customer
 
 logger = logging.getLogger(__name__)
@@ -11,7 +12,7 @@ def create_customer(first_name: str, last_name: str, email: str, repo):
         return repo.save(customer)
     except DatabaseError as e:
         logger.critical(str(e))
-
+        return False
 
 def update_customer(
     customer_id: int, first_name: str, last_name: str, email: str, repo
@@ -23,6 +24,8 @@ def update_customer(
         )
     except DatabaseError as e:
         logger.critical(str(e))
+        return False
+    return True
 
 
 def delete_customer(customer_id: int, repo):
@@ -30,11 +33,13 @@ def delete_customer(customer_id: int, repo):
         repo.delete(customer_id)
     except DatabaseError as e:
         logger.critical(str(e))
-
+        return False
+    return True
 
 def get_customer(customer_id: int, repo):
     try:
         customer = repo.get(customer_id)
     except DatabaseError as e:
         logger.critical(str(e))
+        return None
     return customer

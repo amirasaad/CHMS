@@ -17,20 +17,19 @@ def repo_with_mocked_cursor():
 
 class TestPureSQLRepository:
     def test_save_customer(self):
-        repository, mock_cursor, db_mock_connection= repo_with_mocked_cursor()
+        repository, mock_cursor, db_mock_connection = repo_with_mocked_cursor()
         customer = Customer(
             first_name="John", last_name="Smith", email="john@example.com"
         )
-        repository.save(customer)
+        id = repository.save(customer)
         mock_cursor.execute.assert_called_once_with(
-            """INSERT INTO {}(first_name,last_name, email) VALUES ({},{},{})""".format(
-                repository.db_table_name,
-                customer.first_name,
-                customer.last_name,
-                customer.email,
-            )
+            """INSERT INTO {} (first_name, last_name, email) VALUES (%s,%s,%s)""".format(
+                repository.db_table_name
+            ),
+            (customer.first_name, customer.last_name, customer.email),
         )
         db_mock_connection.commit.assert_called_once()
+        assert id != 1
 
     def test_save_handle_db_exception_and_log_error(self, caplog):
         repository, mock_cursor, _ = repo_with_mocked_cursor()

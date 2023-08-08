@@ -1,7 +1,13 @@
-from flask import Flask, abort
+from flask import Flask
 from flask import request
 
+from .src import services
+from .src.repository import PureSQLRepository
+from .src.db import db_connection
+
 app = Flask(__name__)
+
+repo = PureSQLRepository(db_connection)
 
 
 @app.route("/")
@@ -18,4 +24,7 @@ def create_customer():
         return {"errors": ["FirstName is required."]}, 400
     if "last_name" not in data:
         return {"errors": ["LastName is required."]}, 400
-    return {}, 201
+    customer_id = services.create_customer(
+        data["first_name"], data["last_name"], data["email"], repo
+    )
+    return {"id": customer_id}, 201

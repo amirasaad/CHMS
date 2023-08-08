@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -6,6 +7,7 @@ class Customer:
     first_name: str
     last_name: str
     email: str
+    id: Optional[int] = None
 
     @staticmethod
     def from_dict(customer_dict):

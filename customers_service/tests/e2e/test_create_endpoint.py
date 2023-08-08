@@ -1,14 +1,20 @@
 import requests
 import pytest
 from http import HTTPStatus
+from uuid import uuid4
 
 
 def test_should_return_status_201_for_valid_request():
     response = requests.post(
         "http://127.0.0.1:5000/customers",
-        json={"first_name": "John", "last_name": "Smith", "email": "doe@example.com"},
+        json={
+            "first_name": "John",
+            "last_name": "Smith",
+            "email": f"{uuid4()}@example.com",
+        },
     )
     assert response.status_code == HTTPStatus.CREATED
+    assert "id" in response.json()
 
 
 @pytest.mark.parametrize(

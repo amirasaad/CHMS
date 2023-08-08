@@ -11,7 +11,7 @@ services:
     volumes:
       - ./customers_service:/app
     environment:
-      MYSQL_HOST: mysql
+      MYSQL_HOST: db
       MYSQL_USER: root
       MYSQL_PASSWORD: sekret
       MYSQL_DB: car_rental_db

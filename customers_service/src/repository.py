@@ -16,17 +16,20 @@ class PureSQLRepository:
         cursor = self.db_connection.cursor()
         try:
             cursor.execute(
-                """INSERT INTO {}(first_name,last_name, email) VALUES ({},{},{})""".format(
-                    self.db_table_name,
+                """INSERT INTO {} (first_name, last_name, email) VALUES (%s,%s,%s)""".format(
+                    self.db_table_name
+                ),
+                (
                     customer.first_name,
                     customer.last_name,
                     customer.email,
-                )
+                ),
             )
         except Exception as e:
             logger.critical(str(e))
             raise DatabaseError(str(e))
         self.db_connection.commit()
+        return cursor.lastrowid
 
     def get(self, customer_id: int):
         cursor = self.db_connection.cursor()

@@ -21,9 +21,9 @@ services:
       MYSQL_ROOT_PASSWORD: sekret
       MYSQL_DATABASE: car_rental_db
     ports:
-      - 5432:5432
+      - 3306:3306
     expose:
-      - 5432:5432
+      - 3306:3306
 
 volumes:
   car-rental-mysql-data:

@@ -1,7 +1,7 @@
-import requests
-import pytest
 from http import HTTPStatus
-from uuid import uuid4
+
+import pytest
+import requests
 
 from .utils import post_to_create_customer
 
@@ -13,9 +13,13 @@ def test_should_return_status_201_for_valid_request():
 @pytest.mark.parametrize(
     "data,validation",
     [
-        ({"first_name": "John", "last_name": "Smith"}, "Email is required."),
-        ({"first_name": "John", "email": "doe@example.com"}, "LastName is required."),
-        ({"last_name": "John", "email": "doe@example.com"}, "FirstName is required."),
+        ({"first_name": "John", "last_name": "Smith"}, "email is required."),
+        ({"first_name": "John", "email": "doe@example.com"}, "last_name is required."),
+        ({"last_name": "John", "email": "doe@example.com"}, "first_name is required."),
+        (
+            {"first_name": "John", "last_name": "Smith", "email": "test"},
+            "Invalid email.",
+        ),
     ],
 )
 def test_required_fields(data, validation):

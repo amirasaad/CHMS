@@ -1,6 +1,7 @@
-import requests
 from http import HTTPStatus
 from uuid import uuid4
+
+import requests
 
 from .utils import post_to_create_customer
 

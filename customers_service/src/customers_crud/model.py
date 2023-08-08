@@ -11,6 +11,11 @@ class Customer:
     email: str
     id: Optional[int] = None
 
+    EMAIL_INVALID = "Invalid email."
+    EMAIL_REQUIRED = "email is required."
+    FIRST_NAME_REQUIRED = "first_name is required."
+    LAST_NAME_REQUIRED = "last_name is required."
+
     @staticmethod
     def from_row(customer_row: Tuple[int, str, str, str]):
         return Customer(
@@ -22,3 +27,15 @@ class Customer:
 
     def to_json(self):
         return json.dumps(asdict(self))
+
+    def __post_init__(self):
+        # Validate empty
+        if not self.first_name:
+            raise ValueError(self.FIRST_NAME_REQUIRED)
+        if not self.last_name:
+            raise ValueError(self.LAST_NAME_REQUIRED)
+        if not self.email:
+            raise ValueError(self.EMAIL_REQUIRED)
+        # Validate email
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
+            raise ValueError(self.EMAIL_INVALID)

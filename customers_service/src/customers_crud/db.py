@@ -1,6 +1,6 @@
 from mysql.connector import connection
-from . import config
 
+from . import config
 
 db_connection = connection.MySQLConnection(
     user=config.DB_USER,

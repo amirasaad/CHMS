@@ -1,7 +1,10 @@
 # repository.py
 
+import logging
 from src.exceptions import DatabaseError
 from src.model import Customer
+
+logger = logging.getLogger(__name__)
 
 
 class PureSQLRepository:
@@ -20,4 +23,5 @@ class PureSQLRepository:
                 )
             )
         except Exception as e:
+            logger.critical(str(e))
             raise DatabaseError(str(e))

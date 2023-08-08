@@ -1,8 +1,8 @@
 # repository.py
 
 import logging
-from ..src.exceptions import DatabaseError
-from ..src.model import Customer
+from .exceptions import DatabaseError
+from .model import Customer
 
 logger = logging.getLogger(__name__)
 

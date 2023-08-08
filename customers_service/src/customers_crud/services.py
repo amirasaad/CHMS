@@ -1,6 +1,6 @@
 import logging
 from sqlite3 import DatabaseError
-from ..src.model import Customer
+from .model import Customer
 
 logger = logging.getLogger(__name__)
 

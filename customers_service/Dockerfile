@@ -9,14 +9,11 @@ ENV APPDIR /app
 
 WORKDIR ${APPDIR}
 
-COPY customers_service/Pipfile .
-COPY customers_service/Pipfile.lock .
-
 RUN pip install --upgrade pip
 
 RUN pip install pipenv
-RUN pipenv install --dev --system --deploy
-
 COPY customers_service/ .
+RUN pipenv install --system --deploy --dev
+
 
 ENTRYPOINT [ "pipenv", "run", "flask", "run", "--host=0.0.0.0", "--debug" ]

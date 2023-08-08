@@ -1,6 +1,6 @@
 from unittest.mock import Mock
-from ...src.services import create_customer
-from ...src.repository import PureSQLRepository
+from customers_crud.services import create_customer
+from customers_crud.repository import PureSQLRepository
 
 
 def test_create_customer_service():

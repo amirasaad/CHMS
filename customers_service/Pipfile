@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask = "*"
 mysql-connector-python = "*"
+customers-crud = {path = "./src", editable = true}
 
 [dev-packages]
 pytest = "*"
@@ -13,6 +14,7 @@ black = "*"
 isort = "*"
 mypy = "*"
 pylint = "*"
+requests = "*"
 
 [requires]
 python_version = "3.11"

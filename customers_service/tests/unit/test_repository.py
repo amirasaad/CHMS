@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock, Mock
 
 import pytest
-from ...src.exceptions import DatabaseError
-from ...src.model import Customer
+from customers_crud.exceptions import DatabaseError
+from customers_crud.model import Customer
 
-from ...src.repository import PureSQLRepository
+from customers_crud.repository import PureSQLRepository
 
 
 def repo_with_mocked_cursor():

@@ -1,9 +1,9 @@
 from flask import Flask
 from flask import request
 
-from .src import services
-from .src.repository import PureSQLRepository
-from .src.db import db_connection
+from customers_crud import services
+from customers_crud.repository import PureSQLRepository
+from customers_crud.db import db_connection
 
 app = Flask(__name__)
 

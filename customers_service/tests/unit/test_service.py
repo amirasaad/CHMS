@@ -6,28 +6,27 @@ from customers_crud.services import (
     get_customer,
 )
 from customers_crud.repository import PureSQLRepository
-from ..integration.test_repository import repo_with_mocked_cursor
 
 
-def test_create_customer_service():
-    repo = PureSQLRepository(Mock())
+def test_create_customer_service(db_connection):
+    repo = PureSQLRepository(db_connection)
     customer_id = create_customer("John", "Smith", "joe@example.com", repo)
     assert customer_id != None
 
 
-def test_update_customer_service():
-    repo = PureSQLRepository(Mock())
+def test_update_customer_service(db_connection):
+    repo = PureSQLRepository(db_connection)
     update_customer(1, "John", "Smith", "joe@example.com", repo)
 
 
-def test_delete_customer_service():
-    repo = PureSQLRepository(Mock())
+def test_delete_customer_service(db_connection):
+    repo = PureSQLRepository(db_connection)
     delete_customer(1, repo)
 
 
-def test_get_customer_service():
-    repo, mock_cursor, _ = repo_with_mocked_cursor()
-    mock_cursor.fetchone.return_value = {
+def test_get_customer_service(db_connection, db_cursor):
+    repo = PureSQLRepository(db_connection)
+    db_cursor.fetchone.return_value = {
         "id": 1,
         "first_name": "John",
         "last_name": "Doe",

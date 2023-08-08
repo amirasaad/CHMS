@@ -6,7 +6,6 @@ from uuid import uuid4
 from .utils import post_to_create_customer
 
 
-
 def test_should_return_status_201_for_valid_request():
     post_to_create_customer()
 

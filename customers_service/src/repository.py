@@ -42,7 +42,8 @@ class PureSQLRepository:
     def update(self, customer_id: int, customer_dict: dict):
         try:
             self.db_cursor.execute(
-                """UPDATE Customers SET first_name = {} SET last_name = {}, SET email = {}  WHERE id = {}""".format(
+                """UPDATE {} SET first_name = {} SET last_name = {}, SET email = {}  WHERE id = {}""".format(
+                    self.db_table_name,
                     customer_dict["first_name"],
                     customer_dict["last_name"],
                     customer_dict["email"],
@@ -56,8 +57,8 @@ class PureSQLRepository:
     def delete(self, customer_id: int):
         try:
             self.db_cursor.execute(
-                """DELETE first_name,last_name,email from Customers WHERE id = {}""".format(
-                    customer_id
+                """DELETE first_name,last_name,email from {} WHERE id = {}""".format(
+                    self.db_table_name, customer_id
                 )
             )
         except Exception as e:

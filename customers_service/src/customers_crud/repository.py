@@ -1,6 +1,7 @@
 # repository.py
 
 import logging
+from abc import ABC, abstractmethod
 
 from .exceptions import DatabaseError
 from .model import Customer
@@ -8,7 +9,25 @@ from .model import Customer
 logger = logging.getLogger(__name__)
 
 
-class PureSQLRepository:
+class ABCRepository(ABC):
+    @abstractmethod
+    def save(self, customer: Customer):
+        raise NotImplemented
+
+    @abstractmethod
+    def get(self, customer_id: int):
+        raise NotImplemented
+
+    @abstractmethod
+    def update(self, customer_id, customer_dict: dict):
+        raise NotImplemented
+
+    @abstractmethod
+    def delete(self, customer_id: int):
+        raise NotImplemented
+
+
+class MySQLRepository(ABCRepository):
     def __init__(self, db_connection, db_table_name: str = "Customers"):
         self.db_connection = db_connection
         self.db_table_name = db_table_name

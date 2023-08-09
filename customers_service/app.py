@@ -5,11 +5,11 @@ from flask import Flask, request
 
 from customers_crud import services
 from customers_crud.db import db_connection
-from customers_crud.repository import PureSQLRepository
+from customers_crud.repository import MySQLRepository
 
 app = Flask(__name__)
 
-repo = PureSQLRepository(db_connection)
+repo = MySQLRepository(db_connection)
 
 
 @app.errorhandler(ValueError)

@@ -1,7 +1,7 @@
 import json
-from dataclasses import asdict, dataclass
 import re
-from typing import Tuple, Optional
+from dataclasses import asdict, dataclass
+from typing import Optional, Tuple
 
 
 @dataclass

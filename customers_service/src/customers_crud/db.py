@@ -1,3 +1,6 @@
+"""db connection.
+"""
+
 from mysql.connector import connection
 
 from . import config

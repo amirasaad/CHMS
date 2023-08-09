@@ -14,44 +14,61 @@ class PureSQLRepository:
         self.db_table_name = db_table_name
 
     def save(self, customer: Customer):
+        """Save customer information into the database.
+
+        Args:
+            customer (Customer): Holds valid customer information to be saved into the database.
+
+        Raises:
+            DatabaseError: Any exceptions caught during the delete will raised
+            a DatabaseError from that exception.
+
+        Returns:
+            int: ID of the saved customer in the database.
+        """
         cursor = self.db_connection.cursor()
+        sql = f"""INSERT INTO {self.db_table_name} (first_name, last_name, email) VALUES (%s,%s,%s)"""
         try:
             cursor.execute(
-                """INSERT INTO {} (first_name, last_name, email) VALUES (%s,%s,%s)""".format(
-                    self.db_table_name
-                ),
+                sql,
                 (
                     customer.first_name,
                     customer.last_name,
                     customer.email,
                 ),
             )
-        except Exception as e:
-            raise DatabaseError(str(e))
+        except Exception as error:
+            raise DatabaseError(str(error)) from error
         self.db_connection.commit()
+        # Cursor lastrowid holds the last row's id.
         return cursor.lastrowid
 
     def get(self, customer_id: int):
         cursor = self.db_connection.cursor()
+        sql = f"""SELECT id,first_name,last_name,email from {self.db_table_name} WHERE id = {customer_id}"""
         try:
-            cursor.execute(
-                """SELECT id,first_name,last_name,email from {} WHERE id = {}""".format(
-                    self.db_table_name,
-                    customer_id,
-                )
-            )
-        except Exception as e:
-            raise DatabaseError(str(e))
+            cursor.execute(sql)
+        except Exception as error:
+            raise DatabaseError(str(error)) from error
         customer_db = cursor.fetchone()
         return Customer.from_row(customer_db)
 
     def update(self, customer_id: int, customer_dict: dict):
+        """Update customer information in the database for a given dict.
+
+        Args:
+            customer_id (int): Customer ID to be updated.
+            customer_dict (dict): A dictionary of customer information to update from.
+
+        Raises:
+            DatabaseError: Any exceptions caught during the delete will raised
+            a DatabaseError from that exception.
+        """
         cursor = self.db_connection.cursor()
+        sql = f"""UPDATE {self.db_table_name} SET first_name = %s, last_name = %s, email = %s WHERE id = %s"""
         try:
             cursor.execute(
-                """UPDATE {} SET first_name = %s, last_name = %s, email = %s WHERE id = %s""".format(
-                    self.db_table_name
-                ),
+                sql,
                 (
                     customer_dict["first_name"],
                     customer_dict["last_name"],
@@ -59,17 +76,24 @@ class PureSQLRepository:
                     customer_id,
                 ),
             )
-        except Exception as e:
-            raise DatabaseError(str(e))
+        except Exception as error:
+            raise DatabaseError(str(error)) from error
         self.db_connection.commit()
 
     def delete(self, customer_id: int):
+        """Delete a customer from the database by id.
+
+        Args:
+            customer_id (int): Customer id to delete.
+
+        Raises:
+            DatabaseError: Any exceptions caught during the delete will raised
+            a DatabaseError from that exception.
+        """
         cursor = self.db_connection.cursor()
+        sql = f"""DELETE FROM {self.db_table_name} WHERE id = %s"""
         try:
-            cursor.execute(
-                """DELETE FROM {} WHERE id = %s""".format(self.db_table_name),
-                (customer_id,),
-            )
-        except Exception as e:
-            raise DatabaseError(str(e))
+            cursor.execute(sql, (customer_id,))
+        except Exception as error:
+            raise DatabaseError(str(error)) from error
         self.db_connection.commit()

@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from uuid import uuid4
 
 import requests
 

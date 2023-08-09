@@ -1,4 +1,5 @@
 import pytest
+
 from customers_crud.model import Customer
 
 

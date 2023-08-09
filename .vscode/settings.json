@@ -16,11 +16,16 @@
 	],
 	"conventionalCommits.scopes": [
 		"db",
-		"customers"
+		"customers",
+		"api",
+		"services"
 	],
 	"python.testing.pytestArgs": [
 		"customers_service"
 	],
 	"python.testing.unittestEnabled": false,
-	"python.testing.pytestEnabled": true
+	"python.testing.pytestEnabled": true,
+	"python.analysis.extraPaths": [
+		"./customers_service/src"
+	]
 }

@@ -1,3 +1,4 @@
+import mysql.connector
 from http import HTTPStatus
 
 from flask import Flask, request
@@ -15,6 +16,9 @@ repo = PureSQLRepository(db_connection)
 def handle_bad_request(e):
     return {"errors": [str(e)]}, HTTPStatus.BAD_REQUEST
 
+@app.errorhandler(mysql.connector.errors.OperationalError)
+def handle_db_error(e):
+    return {"error": str(e)}, HTTPStatus.SERVICE_UNAVAILABLE
 
 @app.route("/")
 def health_check():
@@ -41,7 +45,11 @@ def create_customer():
 def update_customer(customer_id):
     data = request.get_json()
     if services.update_customer(
-        customer_id, data["first_name"], data["last_name"], data["email"], repo
+        customer_id=customer_id,
+        first_name=data.get("first_name", ""),
+        last_name=data.get("last_name", ""),
+        email=data.get("email", ""),
+        repo=repo
     ):
         return {"message": "Customer Updated."}, HTTPStatus.OK
     return {

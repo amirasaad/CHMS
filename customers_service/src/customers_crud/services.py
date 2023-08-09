@@ -32,12 +32,20 @@ def create_customer(first_name: str, last_name: str, email: str, repo):
 
 
 def update_customer(
-    customer_id: int, first_name: str, last_name: str, email: str, repo
+    *,
+    customer_id: int,
+    first_name: str | None = None,
+    last_name: str | None = None,
+    email: str | None = None,
+    repo
 ):
+    customer_dict = {"first_name": first_name, "last_name": last_name, "email": email}
+    # Remove None values
+    customer_dict = { k: v for k,v in customer_dict.items() if v }
     try:
         repo.update(
             customer_id,
-            {"first_name": first_name, "last_name": last_name, "email": email},
+            customer_dict,
         )
     except DatabaseError as error:
         logger.critical(str(error))

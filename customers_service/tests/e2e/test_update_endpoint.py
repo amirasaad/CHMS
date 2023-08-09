@@ -18,3 +18,15 @@ def test_should_return_status_200_for_valid_request():
     )
     assert response.status_code == HTTPStatus.OK
     assert response.json()["message"] == "Customer Updated."
+
+
+def test_partial_update_return_status_200_for_valid_request():
+    customer_id = post_to_create_customer(skip_assert=True)
+    response = requests.put(
+        f"http://127.0.0.1:5000/customers/{customer_id}",
+        json={
+            "first_name": "Test",
+        },
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json()["message"] == "Customer Updated."

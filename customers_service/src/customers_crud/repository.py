@@ -65,16 +65,12 @@ class PureSQLRepository:
             a DatabaseError from that exception.
         """
         cursor = self.db_connection.cursor()
-        sql = f"""UPDATE {self.db_table_name} SET first_name = %s, last_name = %s, email = %s WHERE id = %s"""
+        update_fields = " = %s, ".join(customer_dict.keys())
+        sql = f"""UPDATE {self.db_table_name} SET {update_fields} = %s WHERE id = %s"""
         try:
             cursor.execute(
                 sql,
-                (
-                    customer_dict["first_name"],
-                    customer_dict["last_name"],
-                    customer_dict["email"],
-                    customer_id,
-                ),
+                tuple(customer_dict.values()) + (customer_id,),
             )
         except Exception as error:
             raise DatabaseError(str(error)) from error

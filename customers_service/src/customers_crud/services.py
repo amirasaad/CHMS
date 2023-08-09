@@ -3,13 +3,14 @@
 import logging
 
 from customers_crud.exceptions import DatabaseError
+from customers_crud.repository import ABCRepository
 
 from .model import Customer
 
 logger = logging.getLogger(__name__)
 
 
-def create_customer(first_name: str, last_name: str, email: str, repo):
+def create_customer(first_name: str, last_name: str, email: str, repo: ABCRepository):
     """Create customer service.
 
     Args:
@@ -37,11 +38,11 @@ def update_customer(
     first_name: str | None = None,
     last_name: str | None = None,
     email: str | None = None,
-    repo
+    repo: ABCRepository
 ):
     customer_dict = {"first_name": first_name, "last_name": last_name, "email": email}
     # Remove None values
-    customer_dict = { k: v for k,v in customer_dict.items() if v }
+    customer_dict = {k: v for k, v in customer_dict.items() if v}
     try:
         repo.update(
             customer_id,
@@ -53,7 +54,7 @@ def update_customer(
     return True
 
 
-def delete_customer(customer_id: int, repo):
+def delete_customer(customer_id: int, repo: ABCRepository):
     try:
         repo.delete(customer_id)
     except DatabaseError as error:
@@ -62,7 +63,7 @@ def delete_customer(customer_id: int, repo):
     return True
 
 
-def get_customer(customer_id: int, repo):
+def get_customer(customer_id: int, repo: ABCRepository):
     try:
         customer = repo.get(customer_id)
     except DatabaseError as error:

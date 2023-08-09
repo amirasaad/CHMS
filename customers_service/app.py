@@ -1,6 +1,6 @@
-import mysql.connector
 from http import HTTPStatus
 
+import mysql.connector
 from flask import Flask, request
 
 from customers_crud import services

@@ -7,7 +7,7 @@
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![License](https://img.shields.io/badge/license-CC-by-ND)](/LICENSE)
 
 </div>
 
@@ -56,11 +56,19 @@ docker compose up -d
 
 ## 🔧 Running the tests <a name = "tests"></a>
 
-To run all tests, run the following command:
+To run the test suite, run the following commands:
 
 ```shell
-docker compose exec app pipenv run pytest
+cd customers_service
+# For Unit tests
+make test-unit
+# For Integration tests
+make test-integration
+# For e2e tests
+make test-e2e
 ```
+
+Before running e2e make sure the server is up.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 

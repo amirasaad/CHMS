@@ -4,12 +4,12 @@ import pytest
 
 from customers_crud.exceptions import DatabaseError
 from customers_crud.model import Customer
-from customers_crud.repository import PureSQLRepository
+from customers_crud.repository import MySQLRepository
 
 
 class TestPureSQLRepository:
     def test_save_customer(self, db_connection, db_cursor):
-        repository = PureSQLRepository(db_connection)
+        repository = MySQLRepository(db_connection)
         customer = Customer(
             first_name="John", last_name="Smith", email="john@example.com"
         )
@@ -24,7 +24,7 @@ class TestPureSQLRepository:
         assert id != 1
 
     def test_save_handle_db_exception(self, db_connection, db_cursor):
-        repository = PureSQLRepository(db_connection)
+        repository = MySQLRepository(db_connection)
         db_cursor.execute.side_effect = Exception("Test")
         customer = Customer(
             first_name="John", last_name="Smith", email="john@example.com"
@@ -33,7 +33,7 @@ class TestPureSQLRepository:
             repository.save(customer)
 
     def test_get_customer_by_id(self, db_connection, db_cursor):
-        repository = PureSQLRepository(db_connection)
+        repository = MySQLRepository(db_connection)
         customer_row = (
             1,
             "John",
@@ -49,7 +49,7 @@ class TestPureSQLRepository:
         assert Customer.from_row(customer_row) == db_customer
 
     def test_delete_customer_by_id(self, db_connection, db_cursor):
-        repository = PureSQLRepository(db_connection)
+        repository = MySQLRepository(db_connection)
         repository.delete(customer_id=1)
         db_cursor.execute.assert_called_once_with(
             """DELETE FROM Customers WHERE id = %s""",
@@ -58,7 +58,7 @@ class TestPureSQLRepository:
         db_connection.commit.assert_called_once()
 
     def test_update_customer_by_id(self, db_connection, db_cursor):
-        repository = PureSQLRepository(db_connection)
+        repository = MySQLRepository(db_connection)
         customer_dict = {
             "first_name": "John",
             "last_name": "Smith",

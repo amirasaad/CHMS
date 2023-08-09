@@ -8,7 +8,7 @@ from .model import Customer
 logger = logging.getLogger(__name__)
 
 
-class PureSQLRepository:
+class MySQLRepository:
     def __init__(self, db_connection, db_table_name: str = "Customers"):
         self.db_connection = db_connection
         self.db_table_name = db_table_name

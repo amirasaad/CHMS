@@ -30,13 +30,23 @@ class TestCreateCustomer:
 class TestUpdateCustomer:
     def test_update_customer_service(self, db_connection):
         repo = PureSQLRepository(db_connection)
-        assert update_customer(customer_id=1, first_name="John", last_name="Smith", email="joe@example.com", repo=repo)
+        assert update_customer(
+            customer_id=1,
+            first_name="John",
+            last_name="Smith",
+            email="joe@example.com",
+            repo=repo,
+        )
 
     def test_handle_database_error(self, caplog, db_connection, db_cursor):
         repo = PureSQLRepository(db_connection)
         db_cursor.execute.side_effect = Exception("Test")
         assert not update_customer(
-            customer_id=1, first_name="John", last_name="Smith", email="joe@example.com", repo=repo
+            customer_id=1,
+            first_name="John",
+            last_name="Smith",
+            email="joe@example.com",
+            repo=repo,
         )
         for record in caplog.records:
             assert record.levelname == "CRITICAL"

@@ -41,7 +41,7 @@ def update_customer(
 ):
     customer_dict = {"first_name": first_name, "last_name": last_name, "email": email}
     # Remove None values
-    customer_dict = { k: v for k,v in customer_dict.items() if v }
+    customer_dict = {k: v for k, v in customer_dict.items() if v}
     try:
         repo.update(
             customer_id,

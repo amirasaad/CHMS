@@ -1,2 +1,6 @@
+"""exceptions.py
+"""
+
+
 class DatabaseError(Exception):
-    pass
+    """Raises if any database error occurred."""

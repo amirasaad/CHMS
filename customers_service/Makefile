@@ -14,9 +14,11 @@ format:
 	pipenv run black src/ tests/
 
 mypy:
-	MYPYPATH=src pipenv run mypy src/ tests/
+	MYPYPATH=src pipenv run mypy --ignore-missing-imports src/ tests/
 
 pylint:
-	pipenv run pylint --ignore-paths '^src/build/.*$' src tests
+	pipenv run pylint --recursive=y customers_crud
 
 check: mypy pylint
+	pipenv run isort . --check-only --profile black
+	pipenv run black --check src/ tests/

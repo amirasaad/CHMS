@@ -1,5 +1,5 @@
-# repository.py
-
+"""repository.py
+"""
 import logging
 from abc import ABC, abstractmethod
 
@@ -10,24 +10,50 @@ logger = logging.getLogger(__name__)
 
 
 class ABCRepository(ABC):
+    """Abstract Repository."""
+
     @abstractmethod
     def save(self, customer: Customer):
-        raise NotImplemented
+        """Persist customer in database
+
+        Args:
+            customer (Customer): customer object to be persisted.
+        """
+        raise NotImplementedError
 
     @abstractmethod
     def get(self, customer_id: int):
-        raise NotImplemented
+        """Get customer by id form database.
+
+        Args:
+            customer_id (int): customer id to be retrieved.
+        """
+        raise NotImplementedError
 
     @abstractmethod
-    def update(self, customer_id, customer_dict: dict):
-        raise NotImplemented
+    def update(self, customer_id: int, customer_dict: dict):
+        """Update existing customer in database.
+
+        Args:
+            customer_id (int): customer id.
+            customer_dict (dict): containing customer data to be updated.
+        """
+        raise NotImplementedError
 
     @abstractmethod
     def delete(self, customer_id: int):
-        raise NotImplemented
+        """Delete customer from the database.
+
+        Args:
+            customer_id (int): customer id in database.
+
+        """
+        raise NotImplementedError
 
 
 class MySQLRepository(ABCRepository):
+    """Mysql implementation for ABCRepository."""
+
     def __init__(self, db_connection, db_table_name: str = "Customers"):
         self.db_connection = db_connection
         self.db_table_name = db_table_name
@@ -46,7 +72,8 @@ class MySQLRepository(ABCRepository):
             int: ID of the saved customer in the database.
         """
         cursor = self.db_connection.cursor()
-        sql = f"""INSERT INTO {self.db_table_name} (first_name, last_name, email) VALUES (%s,%s,%s)"""
+        # pylint: disable-next=line-too-long
+        sql = f"""INSERT INTO {self.db_table_name} (first_name, last_name, email) VALUES (%s,%s,%s)"""  # noqa
         try:
             cursor.execute(
                 sql,
@@ -64,6 +91,7 @@ class MySQLRepository(ABCRepository):
 
     def get(self, customer_id: int):
         cursor = self.db_connection.cursor()
+        # pylint: disable-next=line-too-long
         sql = f"""SELECT id,first_name,last_name,email from {self.db_table_name} WHERE id = {customer_id}"""
         try:
             cursor.execute(sql)

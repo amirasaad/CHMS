@@ -1,3 +1,5 @@
+"""model.py
+"""
 import json
 import re
 from dataclasses import asdict, dataclass
@@ -6,10 +8,18 @@ from typing import Optional, Tuple
 
 @dataclass
 class Customer:
+    """Customer model.
+
+    Raises:
+        ValueError: For invalid inputs
+
+    """
+
     first_name: str
     last_name: str
     email: str
-    id: Optional[int] = None
+    # pylint: disable-next=invalid-name
+    id: Optional[int] = None  # noqa: C0103
 
     EMAIL_INVALID = "Invalid email."
     EMAIL_REQUIRED = "email is required."
@@ -18,6 +28,14 @@ class Customer:
 
     @staticmethod
     def from_row(customer_row: Tuple[int, str, str, str]):
+        """Convert from database record to customer object.
+
+        Args:
+            customer_row (Tuple[int, str, str, str]): Customer row in database.
+
+        Returns:
+            Customer: object
+        """
         return Customer(
             id=customer_row[0],
             first_name=customer_row[1],
@@ -26,6 +44,11 @@ class Customer:
         )
 
     def to_json(self):
+        """Convert to json.
+
+        Returns:
+            dict: customer json
+        """
         return json.dumps(asdict(self))
 
     def __post_init__(self):

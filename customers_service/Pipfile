@@ -17,6 +17,7 @@ pylint = "*"
 requests = "*"
 coverage = "*"
 pytest-coverage = "*"
+types-requests = "*"
 
 [requires]
 python_version = "3.11"

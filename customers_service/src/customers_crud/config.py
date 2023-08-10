@@ -1,3 +1,5 @@
+"""App config
+"""
 import os
 
 DB_NAME = os.environ.get("MYSQL_DB")

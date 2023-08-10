@@ -2,10 +2,9 @@
 """
 import logging
 
-from customers_crud.exceptions import DatabaseError
-from customers_crud.repository import ABCRepository
-
+from .exceptions import DatabaseError
 from .model import Customer
+from .repository import ABCRepository
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ def create_customer(first_name: str, last_name: str, email: str, repo: ABCReposi
         repo (Repository): A customer repository to handle database communication.
 
     Returns:
-        int: ID of the created customer.
+        int | bool: ID of the created customer if success otherwise False.
     """
     customer = Customer(first_name=first_name, last_name=last_name, email=email)
     logger.info("Saving %s to database", customer)
@@ -40,6 +39,19 @@ def update_customer(
     email: str | None = None,
     repo: ABCRepository
 ):
+    """Update customer with non null given value
+
+    Args:
+        customer_id (int): ID of the customer in database.
+        repo (ABCRepository): Customer Repository
+        first_name (str | None, optional): _description_. Defaults to None.
+        last_name (str | None, optional): _description_. Defaults to None.
+        email (str | None, optional): _description_. Defaults to None.
+
+    Returns:
+        bool: True if success False otherwise
+    """
+
     customer_dict = {"first_name": first_name, "last_name": last_name, "email": email}
     # Remove None values
     customer_dict = {k: v for k, v in customer_dict.items() if v}
@@ -55,6 +67,15 @@ def update_customer(
 
 
 def delete_customer(customer_id: int, repo: ABCRepository):
+    """Delete customer from database
+
+    Args:
+        customer_id (int): ID of the customer in database.
+        repo (ABCRepository): Customer Repository
+
+    Returns:
+       bool: True if success False otherwise
+    """
     try:
         repo.delete(customer_id)
     except DatabaseError as error:
@@ -64,6 +85,15 @@ def delete_customer(customer_id: int, repo: ABCRepository):
 
 
 def get_customer(customer_id: int, repo: ABCRepository):
+    """Get customer by ID from the database.
+
+    Args:
+        customer_id (int): ID of the customer in database.
+        repo (ABCRepository): Customer Repository
+
+    Returns:
+        bool: True if success False otherwise
+    """
     try:
         customer = repo.get(customer_id)
     except DatabaseError as error:

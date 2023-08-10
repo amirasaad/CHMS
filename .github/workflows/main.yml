@@ -13,4 +13,4 @@ jobs:
     - name: Run docker-compose
       run: docker compose -f docker-compose.yml up -d
     - name: 'Test'
-      run: docker compose run customers_service make test-e2e
+      run: docker compose run customers make test-e2e

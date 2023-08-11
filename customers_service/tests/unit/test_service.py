@@ -2,8 +2,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from customers_crud.repository import MySQLRepository
 from customers_crud.model import Customer
+from customers_crud.repository import MySQLRepository
 from customers_crud.services import (
     create_customer,
     delete_customer,

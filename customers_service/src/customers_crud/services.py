@@ -3,10 +3,9 @@
 import logging
 
 from .exceptions import DatabaseError
-from .utils import validate_email
-
 from .model import Customer
 from .repository import ABCRepository
+from .utils import validate_email
 
 logger = logging.getLogger(__name__)
 

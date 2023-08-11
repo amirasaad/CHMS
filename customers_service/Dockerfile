@@ -9,6 +9,8 @@ ENV APPDIR /app
 
 WORKDIR ${APPDIR}
 
+RUN apk add --no-cache make
+
 RUN pip install --upgrade pip
 
 RUN pip install pipenv

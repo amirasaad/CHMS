@@ -1,9 +1,10 @@
 """model.py
 """
 import json
-import re
 from dataclasses import asdict, dataclass
 from typing import Optional, Tuple
+
+from customers_crud.utils import validate_email
 
 
 @dataclass
@@ -60,5 +61,5 @@ class Customer:
         if not self.email:
             raise ValueError(self.EMAIL_REQUIRED)
         # Validate email
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
+        if not validate_email(self.email):
             raise ValueError(self.EMAIL_INVALID)

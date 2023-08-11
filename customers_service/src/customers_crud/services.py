@@ -5,6 +5,7 @@ import logging
 from .exceptions import DatabaseError
 from .model import Customer
 from .repository import ABCRepository
+from .utils import validate_email
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,8 @@ def update_customer(
         bool: True if success False otherwise
     """
 
+    if email and not validate_email(email):
+        raise ValueError(Customer.EMAIL_INVALID)
     customer_dict = {"first_name": first_name, "last_name": last_name, "email": email}
     # Remove None values
     customer_dict = {k: v for k, v in customer_dict.items() if v}

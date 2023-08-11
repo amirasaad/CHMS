@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from customers_crud.exceptions import DatabaseError
+from customers_crud.model import Customer
 from customers_crud.repository import MySQLRepository
 from customers_crud.services import (
     create_customer,
@@ -55,6 +55,11 @@ class TestUpdateCustomer:
     def test_partial_update(self, db_connection):
         repo = MySQLRepository(db_connection)
         assert update_customer(customer_id=1, email="test@example.com", repo=repo)
+
+    def test_update_invalid_email(self, db_connection):
+        repo = MySQLRepository(db_connection)
+        with pytest.raises(ValueError, match=Customer.EMAIL_INVALID):
+            update_customer(customer_id=1, email="test", repo=repo)
 
 
 class TestDeleteCustomer:

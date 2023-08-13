@@ -15,6 +15,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: sekret
       MYSQL_DB: car_rental_db
+      APP_HOST: customers:5000
     depends_on:
       db:
         condition: service_healthy

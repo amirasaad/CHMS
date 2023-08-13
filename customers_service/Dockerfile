@@ -18,4 +18,4 @@ COPY customers_service/ .
 RUN pipenv install --system --deploy --dev
 
 
-ENTRYPOINT [ "pipenv", "run", "flask", "run", "--host=0.0.0.0", "--debug" ]
+CMD [ "pipenv", "run", "flask", "run", "--host=0.0.0.0", "--debug" ]

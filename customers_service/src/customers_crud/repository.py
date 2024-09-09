@@ -9,7 +9,7 @@ from .model import Customer
 logger = logging.getLogger(__name__)
 
 
-class ABCRepository(ABC):
+class CustomerRepository(ABC):
     """Abstract Repository."""
 
     @abstractmethod

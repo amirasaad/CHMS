@@ -4,13 +4,13 @@ import logging
 
 from .exceptions import DatabaseError
 from .model import Customer
-from .repository import ABCRepository
+from .repository import CustomerRepository
 from .utils import validate_email
 
 logger = logging.getLogger(__name__)
 
 
-def create_customer(first_name: str, last_name: str, email: str, repo: ABCRepository):
+def create_customer(first_name: str, last_name: str, email: str, repo: CustomerRepository):
     """Create customer service.
 
     Args:
@@ -38,7 +38,7 @@ def update_customer(
     first_name: str | None = None,
     last_name: str | None = None,
     email: str | None = None,
-    repo: ABCRepository
+    repo: CustomerRepository
 ):
     """Update customer with non null given value
 
@@ -69,7 +69,7 @@ def update_customer(
     return True
 
 
-def delete_customer(customer_id: int, repo: ABCRepository):
+def delete_customer(customer_id: int, repo: CustomerRepository):
     """Delete customer from database
 
     Args:
@@ -87,7 +87,7 @@ def delete_customer(customer_id: int, repo: ABCRepository):
     return True
 
 
-def get_customer(customer_id: int, repo: ABCRepository):
+def get_customer(customer_id: int, repo: CustomerRepository):
     """Get customer by ID from the database.
 
     Args:

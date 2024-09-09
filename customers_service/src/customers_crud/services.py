@@ -10,7 +10,12 @@ from .utils import validate_email
 logger = logging.getLogger(__name__)
 
 
-def create_customer(first_name: str, last_name: str, email: str, repo: CustomerRepository):
+def create_customer(
+    first_name: str, 
+    last_name: str, 
+    email: str, 
+    repo: CustomerRepository,
+):
     """Create customer service.
 
     Args:

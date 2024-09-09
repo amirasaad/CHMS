@@ -51,7 +51,7 @@ class CustomerRepository(ABC):
         raise NotImplementedError
 
 
-class MySQLRepository(ABCRepository):
+class MySQLRepository(CustomerRepository):
     """Mysql implementation for ABCRepository."""
 
     def __init__(self, db_connection, db_table_name: str = "Customers"):
